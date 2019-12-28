@@ -7,9 +7,17 @@ VirtualMashine::VirtualMashine()
     this->_cmd.push_back("pop");
     this->_cmd.push_back("dump");
     this->_cmd.push_back("add");
+    this->_cmd.push_back("sub");
+    this->_cmd.push_back("mul");
+    this->_cmd.push_back("div");
+    this->_cmd.push_back("mod");
     this->_functions.push_back(&VirtualMashine::pop);
     this->_functions.push_back(&VirtualMashine::dump);
     this->_functions.push_back(&VirtualMashine::add);
+    this->_functions.push_back(&VirtualMashine::sub);
+    this->_functions.push_back(&VirtualMashine::mul);
+    this->_functions.push_back(&VirtualMashine::div);
+    this->_functions.push_back(&VirtualMashine::mod);
     this->_types.insert(std::pair<std::string, eOperandType>("Int8", Int8));
     this->_types.insert(std::pair<std::string, eOperandType>("Int16", Int16));
     this->_types.insert(std::pair<std::string, eOperandType>("Int32", Int32));
@@ -100,23 +108,85 @@ void VirtualMashine::dump(void)
     nextElem(begin, end);
 }
 
+void VirtualMashine::getTwoTopValue(const IOperand **op1, const IOperand **op2){
+    *op1 = this->_stack.top();
+    this->_stack.pop();
+    *op2 = this->_stack.top();
+    this->_stack.pop();
+}
+
+
 void VirtualMashine::add(void)
 {
-    std::cout << "In add " << this->_stack.size() << std::endl;
     if (this->_stack.size() > 1)
     {
-        const IOperand *op1 = this->_stack.top();
-        this->_stack.pop();
-        const IOperand *op2 = this->_stack.top();
-        this->_stack.pop();
+        const IOperand *op1;
+        const IOperand *op2;
+        getTwoTopValue(&op1, &op2);
         const IOperand *res = *op1 + *op2;
+        delete op1;
+        delete op2;
         this->_stack.push(res);
     }
 }
 
+void VirtualMashine::sub(void){
+    if (this->_stack.size() > 1)
+    {
+        const IOperand *op1;
+        const IOperand *op2;
+        getTwoTopValue(&op1, &op2);
+        const IOperand *res = *op1 - *op2;
+        delete op1;
+        delete op2;
+        this->_stack.push(res);
+    }
+}
+
+void VirtualMashine::mul(void){
+    if (this->_stack.size() > 1)
+    {
+        const IOperand *op1;
+        const IOperand *op2;
+        getTwoTopValue(&op1, &op2);
+        const IOperand *res = *op1 * *op2;
+        delete op1;
+        delete op2;
+        this->_stack.push(res);
+    }
+}
+
+void VirtualMashine::div(void){
+    if (this->_stack.size() > 1)
+    {
+        const IOperand *op1;
+        const IOperand *op2;
+        getTwoTopValue(&op1, &op2);
+        const IOperand *res = *op1 / *op2;
+        delete op1;
+        delete op2;
+        this->_stack.push(res);
+    }
+}
+
+void VirtualMashine::mod(void){
+    if (this->_stack.size() > 1)
+    {
+        const IOperand *op1;
+        const IOperand *op2;
+        getTwoTopValue(&op1, &op2);
+        const IOperand *res = *op1 % *op2;
+        delete op1;
+        delete op2;
+        this->_stack.push(res);
+    }
+}
+
+
+
 bool VirtualMashine::readLine(std::string line)
 {
-    if (line == ";;")
+    if (line == "exit")
         return false;
     std::string tk = line.substr(0, line.find(" "));
     if (tk == "push")

@@ -19,7 +19,12 @@ private:
 	void pop(void);
 	void dump(void);
 	void add(void);
+	void sub(void);
+	void mul(void);
+	void div(void);
+	void mod(void);
 	bool readLine(std::string line);
+	void getTwoTopValue(const IOperand **op1, const IOperand **op2);
 public:
 	VirtualMashine();
 	VirtualMashine(const VirtualMashine& src);
