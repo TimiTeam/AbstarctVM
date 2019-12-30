@@ -113,7 +113,7 @@ void nextElem(MutantStack<const IOperand *>::iterator elem, MutantStack<const IO
 void VirtualMashine::dump(void)
 {
 	if(this->_stack.size() == 0)
-		new ToSmallStackException();
+		throw ToSmallStackException();
 	MutantStack<const IOperand *>::iterator begin = this->_stack.begin();
 	MutantStack<const IOperand *>::iterator end = this->_stack.end();
 	nextElem(begin, end);
@@ -121,82 +121,72 @@ void VirtualMashine::dump(void)
 
 void VirtualMashine::getTwoTopValue(const IOperand **op1, const IOperand **op2)
 {
+	if (this->_stack.size() < 2)
+		throw ToSmallStackException();
 	*op1 = this->_stack.top();
 	this->_stack.pop();
 	*op2 = this->_stack.top();
 	this->_stack.pop();
 }
 
-void VirtualMashine::add(void)
-{
+void VirtualMashine::doMathOperation(char op){
 	const IOperand *op1;
 	const IOperand *op2;
 	getTwoTopValue(&op1, &op2);
-	const IOperand *res = *op1 + *op2;
+	try{
+		switch(op){
+			case '+':
+			this->_stack.push(*op1 + *op2);
+			break ;
+			case '-':
+			this->_stack.push(*op1 - *op2);
+			break ;
+			case '/':
+			this->_stack.push(*op1 / *op2);
+			break ;
+			case '*':
+			this->_stack.push(*op1 * *op2);
+			break ;
+			case '%':
+			this->_stack.push(*op1 % *op2);
+			break ;
+		}
+	}
+	catch (const ToSmallStackException &e){
+		throw e;
+	}
+	catch (const std::exception &e){
+		this->_stack.push(op2);
+		this->_stack.push(op1);
+		throw e;
+	}
 	delete op1;
 	delete op2;
-	this->_stack.push(res);
+}
+
+void VirtualMashine::add(void)
+{
+	doMathOperation('+');
 }
 
 void VirtualMashine::sub(void)
 {
-	const IOperand *op1;
-	const IOperand *op2;
-	getTwoTopValue(&op1, &op2);
-	const IOperand *res = *op1 - *op2;
-	delete op1;
-	delete op2;
-	this->_stack.push(res);
+	doMathOperation('-');
 }
 
 void VirtualMashine::mul(void)
 {
-	const IOperand *op1;
-	const IOperand *op2;
-	getTwoTopValue(&op1, &op2);
-	const IOperand *res = *op1 * *op2;
-	delete op1;
-	delete op2;
-	this->_stack.push(res);
+	doMathOperation('*');
 }
 
 void VirtualMashine::div(void)
 {
-	const IOperand *op1;
-	const IOperand *op2;
-	getTwoTopValue(&op1, &op2);
-	try {
-		const IOperand *res = *op1 / *op2;
-		this->_stack.push(res);
-		delete op1;
-		delete op2;
-	}
-	catch (const OperandAbstract::DivisionOrModuloByZeroException &e)
-	{
-		this->_stack.push(op2);
-		this->_stack.push(op1);
-		throw e;
-	}
+	doMathOperation('/');
 }
 
 void VirtualMashine::mod(void)
 {
-	const IOperand *op1;
-	const IOperand *op2;
-	getTwoTopValue(&op1, &op2);
-	try {
-		std::cout << "mod" << std::endl;
-		const IOperand *res = *op1 % *op2;
-		this->_stack.push(res);
-		delete op1;
-		delete op2;
-	}
-	catch (const OperandAbstract::DivisionOrModuloByZeroException &e)
-	{
-		this->_stack.push(op2);
-		this->_stack.push(op1);
-		throw e;
-	}
+	doMathOperation('%');
 }
 
 void VirtualMashine::print(void)
@@ -248,11 +238,8 @@ bool VirtualMashine::readLine(std::string line)
 		return true;
 	for (size_t i = 0; i < this->_cmd.size(); ++i){
 		if (tk == this->_cmd[i]){
-			if (this->_stack.size() > 1 || tk == "pop" || tk == "print" || tk == "dump"){
-				(this->*_functions[i])();
-				return true;
-			}
-			throw ToSmallStackException("to execute an arithmetic instruction");
+			(this->*_functions[i])();
+			return true;
 		}
 	}
 	if (tk == "push")

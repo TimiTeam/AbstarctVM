@@ -24,6 +24,7 @@ private:
 	void mul(void);
 	void div(void);
 	void mod(void);
+	void doMathOperation(char op);
 	void print(void);
 	void assert(std::string);
 	bool readLine(std::string line);
