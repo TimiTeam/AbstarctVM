@@ -13,6 +13,6 @@ int         main(int argc, char **argv)
     }
     else
         vm.read(std::cin);
-    system("leaks -q avm");
+//    system("leaks -q avm");
     return (0);
 }

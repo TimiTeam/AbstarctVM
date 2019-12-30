@@ -94,9 +94,11 @@ void VirtualMashine::push(std::string ss)
 
 void VirtualMashine::pop(void)
 {
-	if (this->_stack.size() == 0)
+	if (this->_stack.size() > 0){
+		this->_stack.pop();
+	}
+	else
 		throw ToSmallStackExcatrions("to pop the element");
-	this->_stack.pop();
 }
 
 void nextElem(MutantStack<const IOperand *>::iterator elem, MutantStack<const IOperand *>::iterator end)
@@ -110,6 +112,8 @@ void nextElem(MutantStack<const IOperand *>::iterator elem, MutantStack<const IO
 
 void VirtualMashine::dump(void)
 {
+	if(this->_stack.size() == 0)
+		new ToSmallStackExcatrions();
 	MutantStack<const IOperand *>::iterator begin = this->_stack.begin();
 	MutantStack<const IOperand *>::iterator end = this->_stack.end();
 	nextElem(begin, end);
@@ -181,6 +185,7 @@ void VirtualMashine::mod(void)
 	const IOperand *op2;
 	getTwoTopValue(&op1, &op2);
 	try {
+		std::cout << "mod" << std::endl;
 		const IOperand *res = *op1 % *op2;
 		this->_stack.push(res);
 		delete op1;
@@ -314,7 +319,7 @@ VirtualMashine::ToSmallStackExcatrions::ToSmallStackExcatrions(std::string mess)
 
 const char *VirtualMashine::ToSmallStackExcatrions::what() const throw()
 {
-	return ("Too small stack " + _additionamMessage).c_str();
+	return ("Too small stack");
 }
 
 VirtualMashine::ToSmallStackExcatrions::~ToSmallStackExcatrions() throw()
