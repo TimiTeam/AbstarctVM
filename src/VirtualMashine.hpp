@@ -5,6 +5,7 @@
 # include "Mutantstack.hpp"
 # include "OperandFactory.hpp"
 # include <map>
+# include <istream>
 
 class VirtualMashine
 {
@@ -30,8 +31,7 @@ private:
 public:
 	VirtualMashine();
 	VirtualMashine(const VirtualMashine& src);
-	void readFromFile(std::string fileName);
-	void readFromConsole();
+	void read(std::istream &ss);
 	~VirtualMashine();
 	VirtualMashine& operator=(const VirtualMashine& src);
 };

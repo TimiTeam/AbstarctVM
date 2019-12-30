@@ -45,6 +45,7 @@ VirtualMashine::~VirtualMashine()
 
 VirtualMashine &VirtualMashine::operator=(const VirtualMashine &src)
 {
+
     return *this;
 }
 
@@ -216,7 +217,12 @@ bool VirtualMashine::readLine(std::string line)
 {
     if (line == "exit")
         return false;
+
     std::string tk = line.substr(0, line.find(" "));
+    if (tk == ";;")
+        return false;
+    else if (tk == ";")
+        return true;
     if (tk == "push")
         this->push(line.substr(tk.length(), line.length()));
     if (tk == "assert"){
@@ -233,17 +239,13 @@ bool VirtualMashine::readLine(std::string line)
     return true;
 }
 
-void VirtualMashine::readFromFile(std::string fileName)
-{
-}
-
-void VirtualMashine::readFromConsole()
+void VirtualMashine::read(std::istream &ss)
 {
     bool run = true;
     while (run)
     {
         std::string line;
-        std::getline(std::cin, line);
+        std::getline(ss, line);
         run = readLine(line);
     }
 }

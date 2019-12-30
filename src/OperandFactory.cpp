@@ -31,14 +31,14 @@ IOperand const * OperandFactory::createOperand( eOperandType type, std::string c
 	return NULL;
 }
 
-void const OperandFactory::cheakValueRange(double min, double max, double val) const{
+void OperandFactory::cheakValueRange(double min, double max, double val) const{
 	if (val < min)
 		throw UnderflowValueExcatrions();
 	else if (val > max)
 		throw OverflowValueExcatrions();
 }
 
-void const OperandFactory::cheakValueRange(int min, int max, int val) const{
+void OperandFactory::cheakValueRange(int min, int max, int val) const{
 	if (val < min)
 		throw UnderflowValueExcatrions();
 	else if (val > max)
