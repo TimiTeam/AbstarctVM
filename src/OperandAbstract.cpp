@@ -47,12 +47,16 @@ std::string const OperandAbstract::getResultAsString(double val1, char op, doubl
 		res = val1 + val2;
 		break;
 	case '/':
+		if (val2 == 0)
+			throw DivisionOrModuloByZeroExcatrions("Division");
 		res = val1 / val2;
 		break;
 	case '*':
 		res = val1 * val2;
 		break;
 	case '%':
+		if (static_cast<int>(val2) == 0)
+			throw DivisionOrModuloByZeroExcatrions("Modulo");
 		res = static_cast<int>(val1) % static_cast<int>(val2);
 		break;
 	default:
@@ -88,4 +92,36 @@ IOperand const * OperandAbstract::operator/( IOperand const & rhs ) const{
 
 IOperand const * OperandAbstract::operator%( IOperand const & rhs ) const{
 	return this->makeOperation('%', rhs);
+}
+
+
+
+OperandAbstract::DivisionOrModuloByZeroExcatrions::DivisionOrModuloByZeroExcatrions() throw()
+{
+}
+
+OperandAbstract::DivisionOrModuloByZeroExcatrions::DivisionOrModuloByZeroExcatrions(std::string mess) throw()
+{
+	this->_additionamMessage = mess;
+}
+
+const char *OperandAbstract::DivisionOrModuloByZeroExcatrions::what() const throw()
+{
+	return (_additionamMessage+" by Zero").c_str();
+}
+
+OperandAbstract::DivisionOrModuloByZeroExcatrions::~DivisionOrModuloByZeroExcatrions() throw()
+{
+}
+
+OperandAbstract::DivisionOrModuloByZeroExcatrions::DivisionOrModuloByZeroExcatrions(const DivisionOrModuloByZeroExcatrions &src)
+{
+	(void)src;
+	*this = src;
+}
+
+OperandAbstract::DivisionOrModuloByZeroExcatrions &OperandAbstract::DivisionOrModuloByZeroExcatrions::operator=(const DivisionOrModuloByZeroExcatrions &src)
+{
+	this->_additionamMessage = src._additionamMessage;
+	return *this;
 }
