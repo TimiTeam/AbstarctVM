@@ -27,16 +27,16 @@ public:
 	virtual IOperand const * operator/( IOperand const & rhs ) const;
 	virtual IOperand const * operator%( IOperand const & rhs ) const;
 	virtual std::string const & toString( void ) const = 0; 
-	class DivisionOrModuloByZeroExcatrions : public std::exception
+	class DivisionOrModuloByZeroException : public std::exception
 	{
 	private:
 		std::string _additionamMessage;
 	public:
-		DivisionOrModuloByZeroExcatrions() throw();
-		DivisionOrModuloByZeroExcatrions(std::string) throw();
-		DivisionOrModuloByZeroExcatrions(const DivisionOrModuloByZeroExcatrions& src);
-		DivisionOrModuloByZeroExcatrions& operator=(const DivisionOrModuloByZeroExcatrions& src);
-		~DivisionOrModuloByZeroExcatrions() throw();
+		DivisionOrModuloByZeroException() throw();
+		DivisionOrModuloByZeroException(std::string) throw();
+		DivisionOrModuloByZeroException(const DivisionOrModuloByZeroException& src);
+		DivisionOrModuloByZeroException& operator=(const DivisionOrModuloByZeroException& src);
+		~DivisionOrModuloByZeroException() throw();
 		const char* what() const throw ();
 	};
 };

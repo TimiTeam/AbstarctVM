@@ -34,36 +34,36 @@ public:
 	void read(std::istream &ss);
 	~VirtualMashine();
 	VirtualMashine& operator=(const VirtualMashine& src);
-	class LexicalOrSyntacticExcatrions : public std::exception
+	class LexicalOrSyntacticException : public std::exception
 	{
 	private:
 	public:
-		LexicalOrSyntacticExcatrions() throw();
-		LexicalOrSyntacticExcatrions(const LexicalOrSyntacticExcatrions& src);
-		LexicalOrSyntacticExcatrions& operator=(const LexicalOrSyntacticExcatrions& src);
-		~LexicalOrSyntacticExcatrions() throw();
+		LexicalOrSyntacticException() throw();
+		LexicalOrSyntacticException(const LexicalOrSyntacticException& src);
+		LexicalOrSyntacticException& operator=(const LexicalOrSyntacticException& src);
+		~LexicalOrSyntacticException() throw();
 		const char* what() const throw ();
 	};
-	class ToSmallStackExcatrions : public std::exception
+	class ToSmallStackException : public std::exception
 	{
 	private:
 		std::string _additionamMessage;
 	public:
-		ToSmallStackExcatrions() throw();
-		ToSmallStackExcatrions(std::string) throw();
-		ToSmallStackExcatrions(const ToSmallStackExcatrions& src);
-		ToSmallStackExcatrions& operator=(const ToSmallStackExcatrions& src);
-		~ToSmallStackExcatrions() throw();
+		ToSmallStackException() throw();
+		ToSmallStackException(std::string) throw();
+		ToSmallStackException(const ToSmallStackException& src);
+		ToSmallStackException& operator=(const ToSmallStackException& src);
+		~ToSmallStackException() throw();
 		const char* what() const throw ();
 	};
-	class AssertIsNotTrueExcatrions : public std::exception
+	class AssertIsNotTrueException : public std::exception
 	{
 	private:
 	public:
-		AssertIsNotTrueExcatrions() throw();
-		AssertIsNotTrueExcatrions(const AssertIsNotTrueExcatrions& src);
-		AssertIsNotTrueExcatrions& operator=(const AssertIsNotTrueExcatrions& src);
-		~AssertIsNotTrueExcatrions() throw();
+		AssertIsNotTrueException() throw();
+		AssertIsNotTrueException(const AssertIsNotTrueException& src);
+		AssertIsNotTrueException& operator=(const AssertIsNotTrueException& src);
+		~AssertIsNotTrueException() throw();
 		const char* what() const throw ();
 	};
 };

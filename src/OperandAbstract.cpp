@@ -48,7 +48,7 @@ std::string const OperandAbstract::getResultAsString(double val1, char op, doubl
 		break;
 	case '/':
 		if (val2 == 0)
-			throw DivisionOrModuloByZeroExcatrions("Division");
+			throw DivisionOrModuloByZeroException("Division");
 		res = val1 / val2;
 		break;
 	case '*':
@@ -56,7 +56,7 @@ std::string const OperandAbstract::getResultAsString(double val1, char op, doubl
 		break;
 	case '%':
 		if (static_cast<int>(val2) == 0)
-			throw DivisionOrModuloByZeroExcatrions("Modulo");
+			throw DivisionOrModuloByZeroException("Modulo");
 		res = static_cast<int>(val1) % static_cast<int>(val2);
 		break;
 	default:
@@ -96,30 +96,30 @@ IOperand const * OperandAbstract::operator%( IOperand const & rhs ) const{
 
 
 
-OperandAbstract::DivisionOrModuloByZeroExcatrions::DivisionOrModuloByZeroExcatrions() throw()
+OperandAbstract::DivisionOrModuloByZeroException::DivisionOrModuloByZeroException() throw()
 {
 }
 
-OperandAbstract::DivisionOrModuloByZeroExcatrions::DivisionOrModuloByZeroExcatrions(std::string mess) throw()
+OperandAbstract::DivisionOrModuloByZeroException::DivisionOrModuloByZeroException(std::string mess) throw()
 {
 	this->_additionamMessage = mess;
 }
 
-const char *OperandAbstract::DivisionOrModuloByZeroExcatrions::what() const throw()
+const char *OperandAbstract::DivisionOrModuloByZeroException::what() const throw()
 {
 	return (_additionamMessage+" by Zero").c_str();
 }
 
-OperandAbstract::DivisionOrModuloByZeroExcatrions::~DivisionOrModuloByZeroExcatrions() throw()
+OperandAbstract::DivisionOrModuloByZeroException::~DivisionOrModuloByZeroException() throw()
 {
 }
 
-OperandAbstract::DivisionOrModuloByZeroExcatrions::DivisionOrModuloByZeroExcatrions(const DivisionOrModuloByZeroExcatrions &src)
+OperandAbstract::DivisionOrModuloByZeroException::DivisionOrModuloByZeroException(const DivisionOrModuloByZeroException &src)
 {
 	*this = src;
 }
 
-OperandAbstract::DivisionOrModuloByZeroExcatrions &OperandAbstract::DivisionOrModuloByZeroExcatrions::operator=(const DivisionOrModuloByZeroExcatrions &src)
+OperandAbstract::DivisionOrModuloByZeroException &OperandAbstract::DivisionOrModuloByZeroException::operator=(const DivisionOrModuloByZeroException &src)
 {
 	this->_additionamMessage = src._additionamMessage;
 	return *this;

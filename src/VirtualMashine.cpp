@@ -76,19 +76,19 @@ void VirtualMashine::push(std::string ss)
 		if (this->_types[type] && is_number(val))
 			this->_stack.push(this->_factory.createOperand(this->_types[type], val));
 		else
-			throw LexicalOrSyntacticExcatrions();
+			throw LexicalOrSyntacticException();
 	}
-	catch (const OperandFactory::OverflowValueExcatrions &e)
+	catch (const OperandFactory::OverflowValueException &e)
 	{
 		throw e;
 	}
-	catch (const OperandFactory::UnderflowValueExcatrions &e)
+	catch (const OperandFactory::UnderflowValueException &e)
 	{
 		throw e;
 	}
 	catch (const std::exception &e)
 	{
-		throw LexicalOrSyntacticExcatrions();
+		throw LexicalOrSyntacticException();
 	}
 }
 
@@ -98,7 +98,7 @@ void VirtualMashine::pop(void)
 		this->_stack.pop();
 	}
 	else
-		throw ToSmallStackExcatrions("to pop the element");
+		throw ToSmallStackException("to pop the element");
 }
 
 void nextElem(MutantStack<const IOperand *>::iterator elem, MutantStack<const IOperand *>::iterator end)
@@ -113,7 +113,7 @@ void nextElem(MutantStack<const IOperand *>::iterator elem, MutantStack<const IO
 void VirtualMashine::dump(void)
 {
 	if(this->_stack.size() == 0)
-		new ToSmallStackExcatrions();
+		new ToSmallStackException();
 	MutantStack<const IOperand *>::iterator begin = this->_stack.begin();
 	MutantStack<const IOperand *>::iterator end = this->_stack.end();
 	nextElem(begin, end);
@@ -171,7 +171,7 @@ void VirtualMashine::div(void)
 		delete op1;
 		delete op2;
 	}
-	catch (const OperandAbstract::DivisionOrModuloByZeroExcatrions &e)
+	catch (const OperandAbstract::DivisionOrModuloByZeroException &e)
 	{
 		this->_stack.push(op2);
 		this->_stack.push(op1);
@@ -191,7 +191,7 @@ void VirtualMashine::mod(void)
 		delete op1;
 		delete op2;
 	}
-	catch (const OperandAbstract::DivisionOrModuloByZeroExcatrions &e)
+	catch (const OperandAbstract::DivisionOrModuloByZeroException &e)
 	{
 		this->_stack.push(op2);
 		this->_stack.push(op1);
@@ -210,7 +210,7 @@ void VirtualMashine::print(void)
 			std::cout << static_cast<char>(v) << std::endl;
 		}
 		else
-		throw AssertIsNotTrueExcatrions();
+		throw AssertIsNotTrueException();
 	}
 }
 
@@ -231,9 +231,9 @@ void VirtualMashine::assert(std::string string)
 	}
 	catch (const std::exception &e)
 	{
-		throw LexicalOrSyntacticExcatrions();
+		throw LexicalOrSyntacticException();
 	}
-	throw AssertIsNotTrueExcatrions();
+	throw AssertIsNotTrueException();
 }
 
 bool VirtualMashine::readLine(std::string line)
@@ -252,7 +252,7 @@ bool VirtualMashine::readLine(std::string line)
 				(this->*_functions[i])();
 				return true;
 			}
-			throw ToSmallStackExcatrions("to execute an arithmetic instruction");
+			throw ToSmallStackException("to execute an arithmetic instruction");
 		}
 	}
 	if (tk == "push")
@@ -261,7 +261,7 @@ bool VirtualMashine::readLine(std::string line)
 		assert(line.substr(tk.length(), line.length()));
 	}
 	else
-		throw LexicalOrSyntacticExcatrions();
+		throw LexicalOrSyntacticException();
 	return true;
 }
 
@@ -284,79 +284,79 @@ void VirtualMashine::read(std::istream &ss)
 	}
 }
 
-VirtualMashine::LexicalOrSyntacticExcatrions::LexicalOrSyntacticExcatrions() throw()
+VirtualMashine::LexicalOrSyntacticException::LexicalOrSyntacticException() throw()
 {
 }
 
-const char *VirtualMashine::LexicalOrSyntacticExcatrions::what() const throw()
+const char *VirtualMashine::LexicalOrSyntacticException::what() const throw()
 {
 	return "Lexical or syntactic errors.";
 }
 
-VirtualMashine::LexicalOrSyntacticExcatrions::~LexicalOrSyntacticExcatrions() throw()
+VirtualMashine::LexicalOrSyntacticException::~LexicalOrSyntacticException() throw()
 {
 }
 
-VirtualMashine::LexicalOrSyntacticExcatrions::LexicalOrSyntacticExcatrions(const LexicalOrSyntacticExcatrions &src)
+VirtualMashine::LexicalOrSyntacticException::LexicalOrSyntacticException(const LexicalOrSyntacticException &src)
 {
 	*this = src;
 }
 
-VirtualMashine::LexicalOrSyntacticExcatrions &VirtualMashine::LexicalOrSyntacticExcatrions::operator=(const LexicalOrSyntacticExcatrions &src)
+VirtualMashine::LexicalOrSyntacticException &VirtualMashine::LexicalOrSyntacticException::operator=(const LexicalOrSyntacticException &src)
 {
 	(void)src;
 	return *this;
 }
 
-VirtualMashine::ToSmallStackExcatrions::ToSmallStackExcatrions() throw()
+VirtualMashine::ToSmallStackException::ToSmallStackException() throw()
 {
 }
 
-VirtualMashine::ToSmallStackExcatrions::ToSmallStackExcatrions(std::string mess) throw()
+VirtualMashine::ToSmallStackException::ToSmallStackException(std::string mess) throw()
 {
 	this->_additionamMessage = mess;
 }
 
-const char *VirtualMashine::ToSmallStackExcatrions::what() const throw()
+const char *VirtualMashine::ToSmallStackException::what() const throw()
 {
 	return ("Too small stack");
 }
 
-VirtualMashine::ToSmallStackExcatrions::~ToSmallStackExcatrions() throw()
+VirtualMashine::ToSmallStackException::~ToSmallStackException() throw()
 {
 }
 
-VirtualMashine::ToSmallStackExcatrions::ToSmallStackExcatrions(const ToSmallStackExcatrions &src)
+VirtualMashine::ToSmallStackException::ToSmallStackException(const ToSmallStackException &src)
 {
 	*this = src;
 }
 
-VirtualMashine::ToSmallStackExcatrions &VirtualMashine::ToSmallStackExcatrions::operator=(const ToSmallStackExcatrions &src)
+VirtualMashine::ToSmallStackException &VirtualMashine::ToSmallStackException::operator=(const ToSmallStackException &src)
 {
 	this->_additionamMessage = src._additionamMessage;
 	return *this;
 }
 
 
-VirtualMashine::AssertIsNotTrueExcatrions::AssertIsNotTrueExcatrions() throw()
+VirtualMashine::AssertIsNotTrueException::AssertIsNotTrueException() throw()
 {
 }
 
-const char *VirtualMashine::AssertIsNotTrueExcatrions::what() const throw()
+const char *VirtualMashine::AssertIsNotTrueException::what() const throw()
 {
 	return "Assert is not true";
 }
 
-VirtualMashine::AssertIsNotTrueExcatrions::~AssertIsNotTrueExcatrions() throw()
+VirtualMashine::AssertIsNotTrueException::~AssertIsNotTrueException() throw()
 {
 }
 
-VirtualMashine::AssertIsNotTrueExcatrions::AssertIsNotTrueExcatrions(const AssertIsNotTrueExcatrions &src)
+VirtualMashine::AssertIsNotTrueException::AssertIsNotTrueException(const AssertIsNotTrueException &src)
 {
 	*this = src;
 }
 
-VirtualMashine::AssertIsNotTrueExcatrions &VirtualMashine::AssertIsNotTrueExcatrions::operator=(const AssertIsNotTrueExcatrions &src)
+VirtualMashine::AssertIsNotTrueException &VirtualMashine::AssertIsNotTrueException::operator=(const AssertIsNotTrueException &src)
 {
 	(void)src;
 	return *this;

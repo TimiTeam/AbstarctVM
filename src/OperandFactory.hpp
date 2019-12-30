@@ -28,24 +28,24 @@ public:
 	~OperandFactory();
 	OperandFactory& operator=(const OperandFactory& src);
 	IOperand const * createOperand( eOperandType type, std::string const & value ) const;
-	class OverflowValueExcatrions : public std::exception
+	class OverflowValueException : public std::exception
 	{
 	private:
 	public:
-		OverflowValueExcatrions() throw();
-		OverflowValueExcatrions(const OverflowValueExcatrions& src);
-		OverflowValueExcatrions& operator=(const OverflowValueExcatrions& src);
-		~OverflowValueExcatrions() throw();
+		OverflowValueException() throw();
+		OverflowValueException(const OverflowValueException& src);
+		OverflowValueException& operator=(const OverflowValueException& src);
+		~OverflowValueException() throw();
 		const char* what() const throw ();
 	};
-	class UnderflowValueExcatrions : public std::exception
+	class UnderflowValueException : public std::exception
 	{
 	private:
 	public:
-		UnderflowValueExcatrions() throw();
-		UnderflowValueExcatrions(const UnderflowValueExcatrions& src);
-		UnderflowValueExcatrions& operator=(const UnderflowValueExcatrions& src);
-		~UnderflowValueExcatrions() throw();
+		UnderflowValueException() throw();
+		UnderflowValueException(const UnderflowValueException& src);
+		UnderflowValueException& operator=(const UnderflowValueException& src);
+		~UnderflowValueException() throw();
 		const char* what() const throw ();
 	};
 };

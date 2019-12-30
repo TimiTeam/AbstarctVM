@@ -33,16 +33,16 @@ IOperand const * OperandFactory::createOperand( eOperandType type, std::string c
 
 void OperandFactory::cheakValueRange(double min, double max, double val) const{
 	if (val < min)
-		throw UnderflowValueExcatrions();
+		throw UnderflowValueException();
 	else if (val > max)
-		throw OverflowValueExcatrions();
+		throw OverflowValueException();
 }
 
 void OperandFactory::cheakValueRange(int min, int max, int val) const{
 	if (val < min)
-		throw UnderflowValueExcatrions();
+		throw UnderflowValueException();
 	else if (val > max)
-		throw OverflowValueExcatrions();
+		throw OverflowValueException();
 }
 
 IOperand const * OperandFactory::createInt8( std::string const & value ) const{
@@ -77,55 +77,55 @@ IOperand const * OperandFactory::createDouble( std::string const & value ) const
 	return new const OperandDouble(value, Double, d);
 }
 
-OperandFactory::OverflowValueExcatrions::OverflowValueExcatrions() throw()
+OperandFactory::OverflowValueException::OverflowValueException() throw()
 {
 
 }
 
-const char* OperandFactory::OverflowValueExcatrions::what() const throw()
+const char* OperandFactory::OverflowValueException::what() const throw()
 {
 	return "Value Overflow";
 }
 
-OperandFactory::OverflowValueExcatrions::~OverflowValueExcatrions() throw()
+OperandFactory::OverflowValueException::~OverflowValueException() throw()
 {
 
 }
 
-OperandFactory::OverflowValueExcatrions::OverflowValueExcatrions(const OverflowValueExcatrions& src)
+OperandFactory::OverflowValueException::OverflowValueException(const OverflowValueException& src)
 {
 	(void)src;
 	*this = src;
 }
 
-OperandFactory::OverflowValueExcatrions& OperandFactory::OverflowValueExcatrions::operator=(const OverflowValueExcatrions& src)
+OperandFactory::OverflowValueException& OperandFactory::OverflowValueException::operator=(const OverflowValueException& src)
 {
 	(void)src;
 	return *this;
 }
 
-OperandFactory::UnderflowValueExcatrions::UnderflowValueExcatrions() throw()
+OperandFactory::UnderflowValueException::UnderflowValueException() throw()
 {
 
 }
 
-const char* OperandFactory::UnderflowValueExcatrions::what() const throw()
+const char* OperandFactory::UnderflowValueException::what() const throw()
 {
 	return "Value Underflow";
 }
 
-OperandFactory::UnderflowValueExcatrions::~UnderflowValueExcatrions() throw()
+OperandFactory::UnderflowValueException::~UnderflowValueException() throw()
 {
 
 }
 
-OperandFactory::UnderflowValueExcatrions::UnderflowValueExcatrions(const UnderflowValueExcatrions& src)
+OperandFactory::UnderflowValueException::UnderflowValueException(const UnderflowValueException& src)
 {
 	(void)src;
 	*this = src;
 }
 
-OperandFactory::UnderflowValueExcatrions& OperandFactory::UnderflowValueExcatrions::operator=(const UnderflowValueExcatrions& src)
+OperandFactory::UnderflowValueException& OperandFactory::UnderflowValueException::operator=(const UnderflowValueException& src)
 {
 	(void)src;
 	return *this;
