@@ -11,6 +11,7 @@ VirtualMashine::VirtualMashine()
     this->_cmd.push_back("mul");
     this->_cmd.push_back("div");
     this->_cmd.push_back("mod");
+    this->_cmd.push_back("print");
     this->_functions.push_back(&VirtualMashine::pop);
     this->_functions.push_back(&VirtualMashine::dump);
     this->_functions.push_back(&VirtualMashine::add);
@@ -18,6 +19,7 @@ VirtualMashine::VirtualMashine()
     this->_functions.push_back(&VirtualMashine::mul);
     this->_functions.push_back(&VirtualMashine::div);
     this->_functions.push_back(&VirtualMashine::mod);
+    this->_functions.push_back(&VirtualMashine::print);
     this->_types.insert(std::pair<std::string, eOperandType>("int8", Int8));
     this->_types.insert(std::pair<std::string, eOperandType>("int16", Int16));
     this->_types.insert(std::pair<std::string, eOperandType>("int32", Int32));
@@ -85,12 +87,12 @@ void VirtualMashine::push(std::string ss)
     }
     catch (const std::exception &e)
     {
+        std::cout << "lexical errors or syntactic errors." << std::endl;
     }
 }
 
 void VirtualMashine::pop(void)
 {
-    MutantStack<const IOperand *>::iterator last = this->_stack.end();
     this->_stack.pop();
 }
 
@@ -182,20 +184,32 @@ void VirtualMashine::mod(void){
     }
 }
 
-bool VirtualMashine::assert(std::string string){
+void VirtualMashine::print(void){
+    if (this->_stack.size() > 0){
+        const IOperand *op = this->_stack.top();
+        if (op->getType() == Int8){
+            int v = atoi(op->getValueAsString().c_str());
+            std::cout << static_cast<char>(v) << std::endl;
+        }else
+            std::cout << "Error!" << std::endl;
+    }
+}
+
+void VirtualMashine::assert(std::string string){
     try{
         std::string t = string.substr(string.find(" ") + 1, string.find("(") - 1);
         std::string val = string.substr(t.length() + 2, string.find(")") - t.length() - 2);
         eOperandType type = _types[t];
+        if (static_cast<int>(type) == 0)
+            throw std::exception();
         const IOperand *top = this->_stack.top();
         if (top->getValueAsString() == val && top->getType() == type){
-            return true;
+            return ;
         }
     }catch(const std::exception &e){
-
+        std::cout << "lexical errors or syntactic errors." << std::endl;
     }
     std::cout << "Error!" << std::endl;
-    return false;
 }
 
 bool VirtualMashine::readLine(std::string line)

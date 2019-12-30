@@ -23,7 +23,8 @@ private:
 	void mul(void);
 	void div(void);
 	void mod(void);
-	bool assert(std::string);
+	void print(void);
+	void assert(std::string);
 	bool readLine(std::string line);
 	void getTwoTopValue(const IOperand **op1, const IOperand **op2);
 public:
