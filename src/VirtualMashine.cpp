@@ -18,11 +18,11 @@ VirtualMashine::VirtualMashine()
     this->_functions.push_back(&VirtualMashine::mul);
     this->_functions.push_back(&VirtualMashine::div);
     this->_functions.push_back(&VirtualMashine::mod);
-    this->_types.insert(std::pair<std::string, eOperandType>("Int8", Int8));
-    this->_types.insert(std::pair<std::string, eOperandType>("Int16", Int16));
-    this->_types.insert(std::pair<std::string, eOperandType>("Int32", Int32));
-    this->_types.insert(std::pair<std::string, eOperandType>("Float", Float));
-    this->_types.insert(std::pair<std::string, eOperandType>("Double", Double));
+    this->_types.insert(std::pair<std::string, eOperandType>("int8", Int8));
+    this->_types.insert(std::pair<std::string, eOperandType>("int16", Int16));
+    this->_types.insert(std::pair<std::string, eOperandType>("int32", Int32));
+    this->_types.insert(std::pair<std::string, eOperandType>("float", Float));
+    this->_types.insert(std::pair<std::string, eOperandType>("double", Double));
 }
 
 VirtualMashine::VirtualMashine(const VirtualMashine &src)
@@ -182,7 +182,21 @@ void VirtualMashine::mod(void){
     }
 }
 
+bool VirtualMashine::assert(std::string string){
+    try{
+        std::string t = string.substr(string.find(" ") + 1, string.find("(") - 1);
+        std::string val = string.substr(t.length() + 2, string.find(")") - t.length() - 2);
+        eOperandType type = _types[t];
+        const IOperand *top = this->_stack.top();
+        if (top->getValueAsString() == val && top->getType() == type){
+            return true;
+        }
+    }catch(const std::exception &e){
 
+    }
+    std::cout << "Error!" << std::endl;
+    return false;
+}
 
 bool VirtualMashine::readLine(std::string line)
 {
@@ -191,12 +205,15 @@ bool VirtualMashine::readLine(std::string line)
     std::string tk = line.substr(0, line.find(" "));
     if (tk == "push")
         this->push(line.substr(tk.length(), line.length()));
+    if (tk == "assert"){
+        assert(line.substr(tk.length(), line.length()));
+    }
     for (size_t i = 0; i < this->_cmd.size(); ++i)
     {
         if (tk == this->_cmd[i])
         {
             (this->*_functions[i])();
-            break;
+            return true;
         }
     }
     return true;

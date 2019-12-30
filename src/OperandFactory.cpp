@@ -21,7 +21,7 @@ OperandFactory& OperandFactory::operator=(const OperandFactory& src)
 }
 
 IOperand const * OperandFactory::createOperand( eOperandType type, std::string const & value ) const{
-	IOperand const * (OperandFactory::*functions[])(std::string const & value) const = { &OperandFactory::createInt8, &OperandFactory::createInt16, &OperandFactory::createInt32, &OperandFactory::createFloat, &OperandFactory::createFloat};
+	IOperand const * (OperandFactory::*functions[])(std::string const & value) const = { &OperandFactory::createInt8, &OperandFactory::createInt16, &OperandFactory::createInt32, &OperandFactory::createFloat, &OperandFactory::createDouble};
 	eOperandType types[] = {Int8, Int16, Int32, Float, Double};
 	for (size_t i = 0; i < 5; ++i){
 		if (types[i] == type){
@@ -66,15 +66,15 @@ IOperand const * OperandFactory::createInt32(std::string const & value ) const{
 }
 
 IOperand const * OperandFactory::createFloat( std::string const & value ) const{
-	double d = stod(value);
+	float d = atof(value.c_str());
 	cheakValueRange(-std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), d);
-	return new const OperandFloat(std::to_string(d), Float, static_cast<float>(d));
+	return new const OperandFloat(value, Float, static_cast<float>(d));
 }
 
 IOperand const * OperandFactory::createDouble( std::string const & value ) const{
 	double d = stod(value);
-	cheakValueRange(std::numeric_limits<double>::min(), std::numeric_limits<double>::max(), d);
-	return new const OperandDouble(std::to_string(d), Double, d);
+	cheakValueRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), d);
+	return new const OperandDouble(value, Double, d);
 }
 
 OperandFactory::OverflowValueExcatrions::OverflowValueExcatrions() throw()
