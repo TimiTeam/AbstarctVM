@@ -116,7 +116,6 @@ OperandAbstract::DivisionOrModuloByZeroExcatrions::~DivisionOrModuloByZeroExcatr
 
 OperandAbstract::DivisionOrModuloByZeroExcatrions::DivisionOrModuloByZeroExcatrions(const DivisionOrModuloByZeroExcatrions &src)
 {
-	(void)src;
 	*this = src;
 }
 

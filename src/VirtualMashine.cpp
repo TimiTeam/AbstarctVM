@@ -72,24 +72,23 @@ void VirtualMashine::push(std::string ss)
 	{
 		std::string type = ss.substr(ss.find(" ") + 1, ss.find("(") - 1);
 		std::string val = ss.substr(type.length() + 2, ss.find(")") - type.length() - 2);
-		try
-		{
-			if (this->_types[type] && is_number(val))
-				this->_stack.push(this->_factory.createOperand(this->_types[type], val));
-			else
-				throw LexicalOrSyntacticExcatrions();
-		}
-		catch (const OperandFactory::OverflowValueExcatrions &e)
-		{
-			std::cout << e.what() << std::endl;
-		}
-		catch (const OperandFactory::UnderflowValueExcatrions &e)
-		{
-			std::cout << e.what() << std::endl;
-		}
+
+		if (this->_types[type] && is_number(val))
+			this->_stack.push(this->_factory.createOperand(this->_types[type], val));
+		else
+			throw LexicalOrSyntacticExcatrions();
+	}
+	catch (const OperandFactory::OverflowValueExcatrions &e)
+	{
+		throw e;
+	}
+	catch (const OperandFactory::UnderflowValueExcatrions &e)
+	{
+		throw e;
 	}
 	catch (const std::exception &e)
 	{
+		throw LexicalOrSyntacticExcatrions();
 	}
 }
 
@@ -295,7 +294,6 @@ VirtualMashine::LexicalOrSyntacticExcatrions::~LexicalOrSyntacticExcatrions() th
 
 VirtualMashine::LexicalOrSyntacticExcatrions::LexicalOrSyntacticExcatrions(const LexicalOrSyntacticExcatrions &src)
 {
-	(void)src;
 	*this = src;
 }
 
@@ -325,13 +323,12 @@ VirtualMashine::ToSmallStackExcatrions::~ToSmallStackExcatrions() throw()
 
 VirtualMashine::ToSmallStackExcatrions::ToSmallStackExcatrions(const ToSmallStackExcatrions &src)
 {
-	(void)src;
 	*this = src;
 }
 
 VirtualMashine::ToSmallStackExcatrions &VirtualMashine::ToSmallStackExcatrions::operator=(const ToSmallStackExcatrions &src)
 {
-	(void)src;
+	this->_additionamMessage = src._additionamMessage;
 	return *this;
 }
 
@@ -351,7 +348,6 @@ VirtualMashine::AssertIsNotTrueExcatrions::~AssertIsNotTrueExcatrions() throw()
 
 VirtualMashine::AssertIsNotTrueExcatrions::AssertIsNotTrueExcatrions(const AssertIsNotTrueExcatrions &src)
 {
-	(void)src;
 	*this = src;
 }
 

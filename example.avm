@@ -1,0 +1,13 @@
+; -----------------
+; example         -
+; -----------------
+push int16(723)
+push Int21(3)
+dump
+push int32(1235123)
+push int8(77)
+print
+push int8(33)
+print
+dump
+exit
