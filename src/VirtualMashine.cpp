@@ -198,14 +198,18 @@ void VirtualMashine::print(void)
 		{
 			int v = atoi(op->getValueAsString().c_str());
 			std::cout << static_cast<char>(v) << std::endl;
+			return ;
 		}
 		else
-		throw AssertIsNotTrueException();
+			throw AssertIsNotTrueException();
 	}
+	throw ToSmallStackException();
 }
 
 void VirtualMashine::assert(std::string string)
 {
+	if (this->_stack.size() < 1)
+		throw ToSmallStackException();
 	try
 	{
 		std::string t = string.substr(string.find(" ") + 1, string.find("(") - 1);

@@ -1,4 +1,5 @@
 #include "OperandFactory.hpp"
+#include <sstream>
 
 OperandFactory::OperandFactory()
 {
@@ -31,49 +32,52 @@ IOperand const * OperandFactory::createOperand( eOperandType type, std::string c
 	return NULL;
 }
 
-void OperandFactory::cheakValueRange(double min, double max, double val) const{
-	if (val < min)
+double OperandFactory::checkValueRangeF(double min, double max, std::string val) const{
+	double d = std::stod(val);
+	if (d < min)
 		throw UnderflowValueException();
-	else if (val > max)
+	else if (d > max)
 		throw OverflowValueException();
+	return d;
 }
 
-void OperandFactory::cheakValueRange(int min, int max, int val) const{
-	if (val < min)
+long long OperandFactory::checkValueRange(long long min, long long max, std::string val) const{
+	long long intVal;
+
+	std::istringstream is (val);
+	is >> intVal;
+	if (intVal < min)
 		throw UnderflowValueException();
-	else if (val > max)
+	if (intVal > max)
 		throw OverflowValueException();
+	return intVal;
 }
 
 IOperand const * OperandFactory::createInt8( std::string const & value ) const{
-	int32_t d = atoi(value.c_str());
-	cheakValueRange(-128, 127, d);
+	long long d = checkValueRange(-128, 127, value);
 	int8_t v = static_cast<int8_t>(d);
 	return new const OperandInt8(std::to_string(v), Int8, v);
 }
 
 IOperand const * OperandFactory::createInt16( std::string const & value ) const{
-	int32_t d = atoi(value.c_str());
-	cheakValueRange(-32768, 32767, d);
+	long long d = checkValueRange(-32768, 32767, value);
 	int16_t v = static_cast<int16_t>(d);
 	return new const OperandInt16(std::to_string(d), Int16, v);
 }
 
 IOperand const * OperandFactory::createInt32(std::string const & value ) const{
-	int32_t d = atoi(value.c_str());
-	cheakValueRange(-2147483648, 2147483647, d);
+	long long d = checkValueRange(-2147483648, 2147483647, value);
+	d = static_cast<int32_t>(d);
 	return new const OperandInt32(std::to_string(d), Int32, d);
 }
 
 IOperand const * OperandFactory::createFloat( std::string const & value ) const{
-	float d = atof(value.c_str());
-	cheakValueRange(-std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), d);
+	float d = checkValueRangeF(-std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), value);
 	return new const OperandFloat(value, Float, static_cast<float>(d));
 }
 
 IOperand const * OperandFactory::createDouble( std::string const & value ) const{
-	double d = stod(value);
-	cheakValueRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), d);
+	double d = checkValueRangeF(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), value);
 	return new const OperandDouble(value, Double, d);
 }
 
