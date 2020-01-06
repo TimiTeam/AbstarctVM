@@ -5,7 +5,7 @@ OperandInt32::OperandInt32()
 	
 }
 
-OperandInt32::OperandInt32(std::string s, eOperandType type, int32_t v) : OperandAbstract(s, type), _value(v)
+OperandInt32::OperandInt32(std::string s, eOperandType type) : OperandAbstract(s, type)
 {
 	
 }
@@ -22,6 +22,8 @@ OperandInt32::~OperandInt32()
 
 OperandInt32& OperandInt32::operator=(const OperandInt32& src)
 {
+
+	(void)src;
 	return *this;
 }
 

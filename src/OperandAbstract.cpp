@@ -25,6 +25,7 @@ std::string const & OperandAbstract::getValueAsString() const{
 }
 
 OperandAbstract& OperandAbstract::operator=(const OperandAbstract& src){
+	(void)src;
 	return *this;
 }
 

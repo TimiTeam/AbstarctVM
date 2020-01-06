@@ -5,7 +5,7 @@ OperandInt16::OperandInt16()
 	
 }
 
-OperandInt16::OperandInt16(std::string s, eOperandType type, int16_t v) : OperandAbstract(s, type), _value(v)
+OperandInt16::OperandInt16(std::string s, eOperandType type) : OperandAbstract(s, type)
 {
 }
 
@@ -21,6 +21,7 @@ OperandInt16::~OperandInt16()
 
 OperandInt16& OperandInt16::operator=(const OperandInt16& src)
 {
+	(void)src;
 	return *this;
 }
 

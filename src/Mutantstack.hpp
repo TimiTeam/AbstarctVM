@@ -25,6 +25,7 @@ public:
 
 	MutantStack& operator=(const MutantStack& src){
 		(void) src;
+		return *this;
 	}
 
 	iterator end(){

@@ -13,6 +13,5 @@ int         main(int argc, char **argv)
     }
     else
         vm.read(std::cin, true);
-    system("leaks -q avm");
     return (0);
 }

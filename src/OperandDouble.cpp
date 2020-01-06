@@ -5,7 +5,7 @@ OperandDouble::OperandDouble()
 	
 }
 
-OperandDouble::OperandDouble(std::string s, eOperandType type, double v)  : OperandAbstract(s, type), _value(v)
+OperandDouble::OperandDouble(std::string s, eOperandType type)  : OperandAbstract(s, type)
 {
 	
 }
@@ -22,6 +22,7 @@ OperandDouble::~OperandDouble()
 
 OperandDouble& OperandDouble::operator=(const OperandDouble& src)
 {
+	(void)src;
 	return *this;
 }
 

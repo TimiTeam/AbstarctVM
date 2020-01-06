@@ -41,7 +41,14 @@ VirtualMashine::~VirtualMashine()
 
 VirtualMashine &VirtualMashine::operator=(const VirtualMashine &src)
 {
-	*this = src;
+	if (this != &src){
+		this->_types = src._types;
+		this->_stack = src._stack;
+		this->_output = src._output;
+		this->_functions = src._functions;
+		this->_factory = src._factory;
+		this->_errorFileName = src._errorFileName;
+	}
 	return *this;
 }
 
@@ -257,7 +264,6 @@ bool VirtualMashine::readLine(std::string line)
 void VirtualMashine::read(std::istream &ss, bool std)
 {
 	bool run = true;
-	int i = 0;
 	try
 	{
 		while (run)

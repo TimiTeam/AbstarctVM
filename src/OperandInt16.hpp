@@ -7,10 +7,9 @@
 class OperandInt16 : public OperandAbstract
 {
 private:
-	int16_t _value;
 public:
 	OperandInt16();
-	OperandInt16(std::string s, eOperandType type, int16_t v);
+	OperandInt16(std::string s, eOperandType type);
 	OperandInt16(const OperandInt16& src);
 	~OperandInt16();
 	OperandInt16& operator=(const OperandInt16& src);

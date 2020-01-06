@@ -5,7 +5,7 @@ OperandFloat::OperandFloat()
 	
 }
 
-OperandFloat::OperandFloat(std::string s, eOperandType type, float v) : OperandAbstract(s, type), _value(v)
+OperandFloat::OperandFloat(std::string s, eOperandType type) : OperandAbstract(s, type)
 {
 
 }
@@ -22,6 +22,7 @@ OperandFloat::~OperandFloat()
 
 OperandFloat& OperandFloat::operator=(const OperandFloat& src)
 {
+	(void)src;
 	return *this;
 }
 

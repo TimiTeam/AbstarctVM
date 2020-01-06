@@ -5,7 +5,7 @@ OperandInt8::OperandInt8()
 	
 }
 
-OperandInt8::OperandInt8(std::string s, eOperandType type, int8_t v) : OperandAbstract(s, type), _value(v)
+OperandInt8::OperandInt8(std::string s, eOperandType type) : OperandAbstract(s, type)
 {
 }
 
@@ -21,6 +21,7 @@ OperandInt8::~OperandInt8()
 
 OperandInt8& OperandInt8::operator=(const OperandInt8& src)
 {
+	(void)src;
 	return *this;
 }
 

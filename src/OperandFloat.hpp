@@ -7,10 +7,9 @@
 class OperandFloat : public OperandAbstract
 {
 private:
-	float _value;
 public:
 	OperandFloat();
-	OperandFloat(std::string s, eOperandType type, float v);
+	OperandFloat(std::string s, eOperandType type);
 	OperandFloat(const OperandFloat& src);
 	~OperandFloat();
 	OperandFloat& operator=(const OperandFloat& src);

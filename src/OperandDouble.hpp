@@ -7,10 +7,9 @@
 class OperandDouble : public OperandAbstract
 {
 private:
-	double _value;
 public:
 	OperandDouble();
-	OperandDouble(std::string s, eOperandType type, double v);
+	OperandDouble(std::string s, eOperandType type);
 	OperandDouble(const OperandDouble& src);
 	~OperandDouble();
 	OperandDouble& operator=(const OperandDouble& src);
