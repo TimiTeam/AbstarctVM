@@ -15,6 +15,7 @@ private:
 	OperandFactory	_factory;
 	std::map<std::string, fun> _functions;
 	std::map<std::string, eOperandType> _types;
+	std::string _errorFileName;
 	std::string _output;
 	void push(std::string);
 	void pop(void);

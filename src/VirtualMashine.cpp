@@ -18,6 +18,9 @@ VirtualMashine::VirtualMashine()
 	this->_types.insert(std::pair<std::string, eOperandType>("int32", Int32));
 	this->_types.insert(std::pair<std::string, eOperandType>("float", Float));
 	this->_types.insert(std::pair<std::string, eOperandType>("double", Double));
+	time_t now = time(0);
+	tm *ltm = localtime(&now);
+	this->_errorFileName = "ErrorOutputAt_"+std::to_string(1900 + ltm->tm_year)+"-"+std::to_string(ltm->tm_mon)+"-"+std::to_string(ltm->tm_mday)+"_"+std::to_string(ltm->tm_hour)+":"+std::to_string(ltm->tm_min)+":"+std::to_string(ltm->tm_sec);
 }
 
 VirtualMashine::VirtualMashine(const VirtualMashine &src)
@@ -44,7 +47,7 @@ VirtualMashine &VirtualMashine::operator=(const VirtualMashine &src)
 
 void VirtualMashine::printErrorToFile(std::string message)
 {
-    std::ofstream out("ErrorOutput.txt");
+    std::ofstream out(this->_errorFileName, std::ios::app);
     if (out.is_open()){
         out << message << std::endl;
         out.close();
@@ -73,7 +76,7 @@ bool is_number(const std::string &s)
 void VirtualMashine::push(std::string ss)
 {
 	std::string type = ss.substr(ss.find(" ") + 1, ss.find("(") - 1);
-	size_t end = ss.find(")");
+	size_t end = ss.find_last_of(")");
 	std::string val = ss.substr(type.length() + 2, end - type.length() - 2);
 	if (this->_types[type] && is_number(val) && end != std::string::npos)
 		this->_stack.push(this->_factory.createOperand(this->_types[type], val));
@@ -127,19 +130,19 @@ void VirtualMashine::doMathOperation(char op){
 	try{
 		switch(op){
 			case '+':
-			this->_stack.push(*op1 + *op2);
+			this->_stack.push(*op2 + *op1);
 			break ;
 			case '-':
-			this->_stack.push(*op1 - *op2);
+			this->_stack.push(*op2 - *op1);
 			break ;
 			case '/':
-			this->_stack.push(*op1 / *op2);
+			this->_stack.push(*op2 / *op1);
 			break ;
 			case '*':
-			this->_stack.push(*op1 * *op2);
+			this->_stack.push(*op2 * *op1);
 			break ;
 			case '%':
-			this->_stack.push(*op1 % *op2);
+			this->_stack.push(*op2 % *op1);
 			break ;
 		}
 	}
@@ -216,7 +219,8 @@ void VirtualMashine::assert(std::string string)
 	try
 	{
 		std::string t = string.substr(string.find(" ") + 1, string.find("(") - 1);
-		std::string val = string.substr(t.length() + 2, string.find(")") - t.length() - 2);
+		size_t end = string.find_last_of(")");
+		std::string val = string.substr(t.length() + 2, end - t.length() - 2);
 		eOperandType type = _types[t];
 		if (static_cast<int>(type) == 0)
 			throw std::exception();
@@ -234,7 +238,7 @@ void VirtualMashine::assert(std::string string)
 bool VirtualMashine::readLine(std::string line)
 {
 	std::string tk = line.substr(0, line.find(" "));
-	if (tk == ";")
+	if (tk.at(0) == ';')
 		return true;
 	if (this->_functions.find(tk) != this->_functions.end()){
 		(this->*_functions[tk])();
