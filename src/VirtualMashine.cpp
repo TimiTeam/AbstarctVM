@@ -68,28 +68,13 @@ bool is_number(const std::string &s)
 
 void VirtualMashine::push(std::string ss)
 {
-	try
-	{
-		std::string type = ss.substr(ss.find(" ") + 1, ss.find("(") - 1);
-		std::string val = ss.substr(type.length() + 2, ss.find(")") - type.length() - 2);
-
-		if (this->_types[type] && is_number(val))
-			this->_stack.push(this->_factory.createOperand(this->_types[type], val));
-		else
-			throw LexicalOrSyntacticException();
-	}
-	catch (const OperandFactory::OverflowValueException &e)
-	{
-		throw e;
-	}
-	catch (const OperandFactory::UnderflowValueException &e)
-	{
-		throw e;
-	}
-	catch (const std::exception &e)
-	{
+	std::string type = ss.substr(ss.find(" ") + 1, ss.find("(") - 1);
+	size_t end = ss.find(")");
+	std::string val = ss.substr(type.length() + 2, end - type.length() - 2);
+	if (this->_types[type] && is_number(val) && end != std::string::npos)
+		this->_stack.push(this->_factory.createOperand(this->_types[type], val));
+	else
 		throw LexicalOrSyntacticException();
-	}
 }
 
 void VirtualMashine::pop(void)
@@ -155,7 +140,17 @@ void VirtualMashine::doMathOperation(char op){
 	catch (const ToSmallStackException &e){
 		throw e;
 	}
-	catch (const std::exception &e){
+	catch (const OperandFactory::UnderflowValueException &e){
+		this->_stack.push(op2);
+		this->_stack.push(op1);
+		throw e;
+	}
+	catch (const OperandFactory::OverflowValueException &e){
+		this->_stack.push(op2);
+		this->_stack.push(op1);
+		throw e;
+	}
+	catch (const OperandAbstract::DivisionOrModuloByZeroException &e){
 		this->_stack.push(op2);
 		this->_stack.push(op1);
 		throw e;
@@ -219,9 +214,7 @@ void VirtualMashine::assert(std::string string)
 			throw std::exception();
 		const IOperand *top = this->_stack.top();
 		if (top->getValueAsString() == val && top->getType() == type)
-		{
 			return;
-		}
 	}
 	catch (const std::exception &e)
 	{
@@ -232,13 +225,8 @@ void VirtualMashine::assert(std::string string)
 
 bool VirtualMashine::readLine(std::string line)
 {
-	if (line == "exit")
-		return false;
-
 	std::string tk = line.substr(0, line.find(" "));
-	if (tk == ";;")
-		return false;
-	else if (tk == ";")
+	if (tk == ";")
 		return true;
 	for (size_t i = 0; i < this->_cmd.size(); ++i){
 		if (tk == this->_cmd[i]){
@@ -252,21 +240,31 @@ bool VirtualMashine::readLine(std::string line)
 		assert(line.substr(tk.length(), line.length()));
 	}
 	else
-		throw LexicalOrSyntacticException();
+		throw UnknownInstructionsException();
 	return true;
 }
 
-void VirtualMashine::read(std::istream &ss)
+void VirtualMashine::read(std::istream &ss, bool std)
 {
 	bool run = true;
+	int i = 0;
 	while (run)
 	{
 		std::string line;
 		if (!std::getline(ss, line))
-			throw std::exception();
+			throw DontHaveExitInstructionsException();
 		try
 		{
-			run = readLine(line);
+			if (line == "exit" && !std)
+				break ;
+			else if (line == "exit")
+				continue;
+			if (line == ";;" && std)
+				break ;
+			else if (line == ";;")
+				continue;
+			if (line.length() > 1)
+				run = readLine(line);
 		}
 		catch (const std::exception &e)
 		{
@@ -348,6 +346,54 @@ VirtualMashine::AssertIsNotTrueException::AssertIsNotTrueException(const AssertI
 }
 
 VirtualMashine::AssertIsNotTrueException &VirtualMashine::AssertIsNotTrueException::operator=(const AssertIsNotTrueException &src)
+{
+	(void)src;
+	return *this;
+}
+
+VirtualMashine::UnknownInstructionsException::UnknownInstructionsException() throw()
+{
+}
+
+const char *VirtualMashine::UnknownInstructionsException::what() const throw()
+{
+	return "An instruction is unknown.";
+}
+
+VirtualMashine::UnknownInstructionsException::~UnknownInstructionsException() throw()
+{
+}
+
+VirtualMashine::UnknownInstructionsException::UnknownInstructionsException(const UnknownInstructionsException &src)
+{
+	*this = src;
+}
+
+VirtualMashine::UnknownInstructionsException &VirtualMashine::UnknownInstructionsException::operator=(const UnknownInstructionsException &src)
+{
+	(void)src;
+	return *this;
+}
+
+VirtualMashine::DontHaveExitInstructionsException::DontHaveExitInstructionsException() throw()
+{
+}
+
+const char *VirtualMashine::DontHaveExitInstructionsException::what() const throw()
+{
+	return "Don't have exit instructions";
+}
+
+VirtualMashine::DontHaveExitInstructionsException::~DontHaveExitInstructionsException() throw()
+{
+}
+
+VirtualMashine::DontHaveExitInstructionsException::DontHaveExitInstructionsException(const DontHaveExitInstructionsException &src)
+{
+	*this = src;
+}
+
+VirtualMashine::DontHaveExitInstructionsException &VirtualMashine::DontHaveExitInstructionsException::operator=(const DontHaveExitInstructionsException &src)
 {
 	(void)src;
 	return *this;

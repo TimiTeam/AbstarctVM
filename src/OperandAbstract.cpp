@@ -63,7 +63,8 @@ std::string const OperandAbstract::getResultAsString(double val1, char op, doubl
 		res = 0;
 		break;
 	}
-	return std::to_string(res);
+	std::string resStr = std::to_string(res);
+	return resStr;
 }
 
 IOperand const * OperandAbstract::makeOperation(char op, IOperand const & rhs) const{

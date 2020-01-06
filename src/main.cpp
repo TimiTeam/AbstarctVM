@@ -8,11 +8,11 @@ int         main(int argc, char **argv)
         std::filebuf fb;
         if (fb.open (argv[1], std::ios::in)){
             std::istream is(&fb);
-            vm.read(is);
+            vm.read(is, false);
         }
     }
     else
-        vm.read(std::cin);
-//    system("leaks -q avm");
+        vm.read(std::cin, true);
+    system("leaks -q avm");
     return (0);
 }

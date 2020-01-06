@@ -22,11 +22,20 @@ OperandFactory& OperandFactory::operator=(const OperandFactory& src)
 }
 
 IOperand const * OperandFactory::createOperand( eOperandType type, std::string const & value ) const{
+	size_t strLen = value.length();
+	std::string v = static_cast<std::string>(value);
+	if (v.find(".") != std::string::npos && v.find("0") != std::string::npos){
+		size_t lastZero;
+		while (strLen > 3 && strLen - 1 == (lastZero = v.find_last_of("0"))){
+			v.erase(strLen - 1);
+			strLen = v.length();
+		}
+	}
 	IOperand const * (OperandFactory::*functions[])(std::string const & value) const = { &OperandFactory::createInt8, &OperandFactory::createInt16, &OperandFactory::createInt32, &OperandFactory::createFloat, &OperandFactory::createDouble};
 	eOperandType types[] = {Int8, Int16, Int32, Float, Double};
 	for (size_t i = 0; i < 5; ++i){
 		if (types[i] == type){
-			return (this->*functions[i])(value);
+			return (this->*functions[i])(v);
 		}
 	}
 	return NULL;

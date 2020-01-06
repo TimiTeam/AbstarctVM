@@ -32,7 +32,7 @@ private:
 public:
 	VirtualMashine();
 	VirtualMashine(const VirtualMashine& src);
-	void read(std::istream &ss);
+	void read(std::istream &ss, bool std);
 	~VirtualMashine();
 	VirtualMashine& operator=(const VirtualMashine& src);
 	class LexicalOrSyntacticException : public std::exception
@@ -65,6 +65,26 @@ public:
 		AssertIsNotTrueException(const AssertIsNotTrueException& src);
 		AssertIsNotTrueException& operator=(const AssertIsNotTrueException& src);
 		~AssertIsNotTrueException() throw();
+		const char* what() const throw ();
+	};
+	class UnknownInstructionsException : public std::exception
+	{
+	private:
+	public:
+		UnknownInstructionsException() throw();
+		UnknownInstructionsException(const UnknownInstructionsException& src);
+		UnknownInstructionsException& operator=(const UnknownInstructionsException& src);
+		~UnknownInstructionsException() throw();
+		const char* what() const throw ();
+	};
+	class DontHaveExitInstructionsException : public std::exception
+	{
+	private:
+	public:
+		DontHaveExitInstructionsException() throw();
+		DontHaveExitInstructionsException(const DontHaveExitInstructionsException& src);
+		DontHaveExitInstructionsException& operator=(const DontHaveExitInstructionsException& src);
+		~DontHaveExitInstructionsException() throw();
 		const char* what() const throw ();
 	};
 };
