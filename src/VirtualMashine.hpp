@@ -13,8 +13,7 @@ class VirtualMashine
 private:
 	MutantStack<const IOperand*> _stack;
 	OperandFactory	_factory;
-	std::vector<std::string> _cmd;
-	std::vector<fun> _functions;
+	std::map<std::string, fun> _functions;
 	std::map<std::string, eOperandType> _types;
 	void push(std::string);
 	void pop(void);

@@ -4,22 +4,14 @@
 
 VirtualMashine::VirtualMashine()
 {
-	this->_cmd.push_back("pop");
-	this->_cmd.push_back("dump");
-	this->_cmd.push_back("add");
-	this->_cmd.push_back("sub");
-	this->_cmd.push_back("mul");
-	this->_cmd.push_back("div");
-	this->_cmd.push_back("mod");
-	this->_cmd.push_back("print");
-	this->_functions.push_back(&VirtualMashine::pop);
-	this->_functions.push_back(&VirtualMashine::dump);
-	this->_functions.push_back(&VirtualMashine::add);
-	this->_functions.push_back(&VirtualMashine::sub);
-	this->_functions.push_back(&VirtualMashine::mul);
-	this->_functions.push_back(&VirtualMashine::div);
-	this->_functions.push_back(&VirtualMashine::mod);
-	this->_functions.push_back(&VirtualMashine::print);
+	this->_functions.insert(std::pair<std::string,fun>("pop", &VirtualMashine::pop));
+	this->_functions.insert(std::pair<std::string,fun>("dump", &VirtualMashine::dump));
+	this->_functions.insert(std::pair<std::string,fun>("add", &VirtualMashine::add));
+	this->_functions.insert(std::pair<std::string,fun>("sub", &VirtualMashine::sub));
+	this->_functions.insert(std::pair<std::string,fun>("mul", &VirtualMashine::mul));
+	this->_functions.insert(std::pair<std::string,fun>("div", &VirtualMashine::div));
+	this->_functions.insert(std::pair<std::string,fun>("mod", &VirtualMashine::mod));
+	this->_functions.insert(std::pair<std::string,fun>("print", &VirtualMashine::print));
 	this->_types.insert(std::pair<std::string, eOperandType>("int8", Int8));
 	this->_types.insert(std::pair<std::string, eOperandType>("int16", Int16));
 	this->_types.insert(std::pair<std::string, eOperandType>("int32", Int32));
@@ -55,6 +47,8 @@ bool is_number(const std::string &s)
 	std::string::const_iterator it = s.begin();
 	if (*it == '-')
 		++it;
+	if (*it == '.')
+		return false;
 	while (it != s.end())
 	{
 		if (!std::isdigit(*it) && *it == '.')
@@ -228,11 +222,9 @@ bool VirtualMashine::readLine(std::string line)
 	std::string tk = line.substr(0, line.find(" "));
 	if (tk == ";")
 		return true;
-	for (size_t i = 0; i < this->_cmd.size(); ++i){
-		if (tk == this->_cmd[i]){
-			(this->*_functions[i])();
-			return true;
-		}
+	if (this->_functions.find(tk) != this->_functions.end()){
+		(this->*_functions[tk])();
+		return true;
 	}
 	if (tk == "push")
 		this->push(line.substr(tk.length(), line.length()));
