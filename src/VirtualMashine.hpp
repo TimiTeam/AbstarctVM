@@ -15,6 +15,7 @@ private:
 	OperandFactory	_factory;
 	std::map<std::string, fun> _functions;
 	std::map<std::string, eOperandType> _types;
+	std::string _output;
 	void push(std::string);
 	void pop(void);
 	void dump(void);
@@ -28,6 +29,8 @@ private:
 	void assert(std::string);
 	bool readLine(std::string line);
 	void getTwoTopValue(const IOperand **op1, const IOperand **op2);
+	void nextElem(MutantStack<const IOperand *>::iterator elem, MutantStack<const IOperand *>::iterator end);
+	void printErrorToFile(std::string message);
 public:
 	VirtualMashine();
 	VirtualMashine(const VirtualMashine& src);

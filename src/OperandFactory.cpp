@@ -24,9 +24,10 @@ OperandFactory& OperandFactory::operator=(const OperandFactory& src)
 IOperand const * OperandFactory::createOperand( eOperandType type, std::string const & value ) const{
 	size_t strLen = value.length();
 	std::string v = static_cast<std::string>(value);
-	if (v.find(".") != std::string::npos && v.find("0") != std::string::npos){
+	size_t dot;
+	if ((dot = v.find(".")) != std::string::npos && v.find("0") != std::string::npos){
 		size_t lastZero;
-		while (strLen > 3 && strLen - 1 == (lastZero = v.find_last_of("0"))){
+		while (strLen - 1 == (lastZero = v.find_last_of("0")) && lastZero - 1 > dot){
 			v.erase(strLen - 1);
 			strLen = v.length();
 		}

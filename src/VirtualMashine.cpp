@@ -1,6 +1,7 @@
 #include "VirtualMashine.hpp"
 #include <sstream>
 #include <list>
+#include <fstream>
 
 VirtualMashine::VirtualMashine()
 {
@@ -37,8 +38,17 @@ VirtualMashine::~VirtualMashine()
 
 VirtualMashine &VirtualMashine::operator=(const VirtualMashine &src)
 {
-
+	*this = src;
 	return *this;
+}
+
+void VirtualMashine::printErrorToFile(std::string message)
+{
+    std::ofstream out("ErrorOutput.txt");
+    if (out.is_open()){
+        out << message << std::endl;
+        out.close();
+    }
 }
 
 bool is_number(const std::string &s)
@@ -74,18 +84,20 @@ void VirtualMashine::push(std::string ss)
 void VirtualMashine::pop(void)
 {
 	if (this->_stack.size() > 0){
+		const IOperand *del = this->_stack.top();
 		this->_stack.pop();
+		delete del;
 	}
 	else
 		throw ToSmallStackException("to pop the element");
 }
 
-void nextElem(MutantStack<const IOperand *>::iterator elem, MutantStack<const IOperand *>::iterator end)
+void VirtualMashine::nextElem(MutantStack<const IOperand *>::iterator elem, MutantStack<const IOperand *>::iterator end)
 {
 	if (elem != end)
 	{
 		nextElem((elem + 1), end);
-		std::cout << (*elem)->toString() << std::endl;
+		this->_output += (*elem)->toString() + "\n";
 	}
 }
 
@@ -186,7 +198,9 @@ void VirtualMashine::print(void)
 		if (op->getType() == Int8)
 		{
 			int v = atoi(op->getValueAsString().c_str());
-			std::cout << static_cast<char>(v) << std::endl;
+			char ch = static_cast<char>(v);
+			this->_output += ch;
+			this->_output += "\n";
 			return ;
 		}
 		else
@@ -240,29 +254,37 @@ void VirtualMashine::read(std::istream &ss, bool std)
 {
 	bool run = true;
 	int i = 0;
-	while (run)
+	try
 	{
-		std::string line;
-		if (!std::getline(ss, line))
-			throw DontHaveExitInstructionsException();
-		try
+		while (run)
 		{
-			if (line == "exit" && !std)
-				break ;
-			else if (line == "exit")
-				continue;
-			if (line == ";;" && std)
-				break ;
-			else if (line == ";;")
-				continue;
-			if (line.length() > 1)
-				run = readLine(line);
-		}
-		catch (const std::exception &e)
-		{
-			std::cout << e.what() << std::endl;
+			std::string line;
+			if (!std::getline(ss, line))
+				throw DontHaveExitInstructionsException();
+			try
+			{
+				if (line == "exit" && !std)
+					break ;
+				else if (line == "exit")
+					continue;
+				if (line == ";;" && std)
+					break ;
+				else if (line == ";;")
+					continue;
+				if (line.length() > 1)
+					run = readLine(line);
+			}
+			catch (const std::exception &e)
+			{
+				printErrorToFile(std::string(e.what()));
+			}
 		}
 	}
+	catch(const std::exception& e)
+	{
+		printErrorToFile(std::string(e.what()));
+	}
+	std::cout << this->_output;
 }
 
 VirtualMashine::LexicalOrSyntacticException::LexicalOrSyntacticException() throw()
