@@ -8,7 +8,7 @@ instructions, with one instruction per line.
 
 						Instuctions:
 
-> ; comments
+>  ; comments
 
 > push v: push value at the top of stack
 	int8(n)
