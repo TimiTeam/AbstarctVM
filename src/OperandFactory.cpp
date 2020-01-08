@@ -51,7 +51,7 @@ void OperandFactory::checkValueRange(double min, double max, std::string val) co
 		throw OverflowValueException();
 }
 
-void OperandFactory::checkValueRange(long long min, long long max, std::string val) const{
+long long OperandFactory::checkValueRange(long long min, long long max, std::string val) const{
 	long long intVal;
 
 	std::istringstream is (val);
@@ -60,21 +60,25 @@ void OperandFactory::checkValueRange(long long min, long long max, std::string v
 		throw UnderflowValueException();
 	if (intVal > max)
 		throw OverflowValueException();
+	return intVal;
 }
 
 IOperand const * OperandFactory::createInt8( std::string const & value ) const{
-	checkValueRange(static_cast<long long>(-128), static_cast<long long>(127), value);
-	return new const OperandInt8(value, Int8);
+	long long i = checkValueRange(static_cast<long long>(-128), static_cast<long long>(127), value);
+	int8_t v = static_cast<int8_t>(i);
+	return new const OperandInt8(std::to_string(v), Int8);
 }
 
 IOperand const * OperandFactory::createInt16( std::string const & value ) const{
-	checkValueRange(static_cast<long long>(-32768), static_cast<long long>(32767), value);
-	return new const OperandInt16(value, Int16);
+	long long i = checkValueRange(static_cast<long long>(-32768), static_cast<long long>(32767), value);
+	int16_t v = static_cast<int16_t>(i);
+	return new const OperandInt16(std::to_string(v), Int16);
 }
 
 IOperand const * OperandFactory::createInt32(std::string const & value ) const{
-	checkValueRange(static_cast<long long>(-2147483648),static_cast<long long>(2147483647), value);
-	return new const OperandInt32(value, Int32);
+	long long i = checkValueRange(static_cast<long long>(-2147483648),static_cast<long long>(2147483647), value);
+	int32_t v = static_cast<int32_t>(i);
+	return new const OperandInt32(std::to_string(v), Int32);
 }
 
 IOperand const * OperandFactory::createFloat( std::string const & value ) const{

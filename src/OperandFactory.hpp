@@ -16,7 +16,7 @@ class OperandFactory
 {
 private:
 	void checkValueRange(double min, double max, std::string val) const;
-	void checkValueRange(long long min, long long max, std::string val) const;
+	long long checkValueRange(long long min, long long max, std::string val) const;
 	IOperand const * createInt8( std::string const & value ) const;
 	IOperand const * createInt16( std::string const & value ) const;
 	IOperand const * createInt32( std::string const & value ) const;

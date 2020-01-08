@@ -61,7 +61,7 @@ void VirtualMashine::printErrorToFile(std::string message)
     }
 }
 
-bool is_number(const std::string &s)
+bool is_number(const std::string &s, eOperandType type)
 {
 	int d = 0;
 	std::string::const_iterator it = s.begin();
@@ -77,6 +77,8 @@ bool is_number(const std::string &s)
 			break;
 		++it;
 	}
+	if (type < Float && d > 0)
+		return false;
 	return (!s.empty() && it == s.end() && d <= 1);
 }
 
@@ -85,7 +87,7 @@ void VirtualMashine::push(std::string ss)
 	std::string type = ss.substr(ss.find(" ") + 1, ss.find("(") - 1);
 	size_t end = ss.find_last_of(")");
 	std::string val = ss.substr(type.length() + 2, end - type.length() - 2);
-	if (this->_types[type] && is_number(val) && end != std::string::npos)
+	if (this->_types[type] && is_number(val, this->_types[type]) && end != std::string::npos)
 		this->_stack.push(this->_factory.createOperand(this->_types[type], val));
 	else
 		throw LexicalOrSyntacticException();
