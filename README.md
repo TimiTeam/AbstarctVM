@@ -10,7 +10,7 @@ instructions, with one instruction per line.
 
 > <b> ; </b> comments
 
-> <b>push <u>v</u></b>: push value at the top of stack
+> <b>push <i>v</i></b>: push value at the top of stack
 	int8(n)
 	int16(n)
 	int32(n)
@@ -21,7 +21,7 @@ instructions, with one instruction per line.
 
 > <b>dump</b>: display each value of the stack
 
-> <b>assert <u>v</u></b>: assert that the value at the top of the stack is equal. If is't, the program is exit
+> <b>assert <i>v</i></b>: assert that the value at the top of the stack is equal. If is't, the program is exit
 
 > <b>add</b>: get two value from the top of the stack, adds them and put the result at top
 
