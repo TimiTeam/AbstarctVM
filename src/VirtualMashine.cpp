@@ -84,13 +84,19 @@ bool is_number(const std::string &s, eOperandType type)
 
 void VirtualMashine::push(std::string ss)
 {
-	std::string type = ss.substr(ss.find(" ") + 1, ss.find("(") - 1);
-	size_t end = ss.find_last_of(")");
-	std::string val = ss.substr(type.length() + 2, end - type.length() - 2);
-	if (this->_types[type] && is_number(val, this->_types[type]) && end != std::string::npos)
-		this->_stack.push(this->_factory.createOperand(this->_types[type], val));
-	else
+	try{
+		std::string type = ss.substr(ss.find(" ") + 1, ss.find("(") - 1);
+		size_t end = ss.find_last_of(")");
+		std::string val = ss.substr(type.length() + 2, end - type.length() - 2);
+		if (this->_types[type] && is_number(val, this->_types[type]) && end != std::string::npos)
+			this->_stack.push(this->_factory.createOperand(this->_types[type], val));
+		else
+			throw LexicalOrSyntacticException();
+	}
+	catch (const std::exception &e)
+	{
 		throw LexicalOrSyntacticException();
+	}
 }
 
 void VirtualMashine::pop(void)

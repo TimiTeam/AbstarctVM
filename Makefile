@@ -22,8 +22,6 @@ SRCS := $(addprefix $(DIR_SRC)/, $(SRCS))
 
 FLAGS = -Wall -Wextra -Werror
 
-FLAGS = 
-
 CC = clang++
 
 all: $(NAME)
